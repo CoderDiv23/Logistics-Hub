@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import './App.css'
+
 
 // Import Bootstrap components
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -15,6 +15,7 @@ import UserProfile from './components/UserProfile'
 import Notifications from './components/Notifications'
 import Settings from './components/Settings'
 import Reports from './components/Reports'
+
 
 function App() {
   const [user, setUser] = useState(null)
@@ -85,12 +86,13 @@ function App() {
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/reports" element={<Reports />} />
+          
           </Routes>
         </main>
 
         {/* Footer */}
-        <footer className="bg-light text-center text-lg-start mt-5">
-          <div className="container p-4">
+    <footer className="bg-light text-center text-lg-start mt-5 w-100">
+  <div className="container-fluid p-4">
             <div className="row">
               <div className="col-lg-6 col-md-12 mb-4 mb-md-0">
                 <h5 className="text-uppercase">Digital Logistics Hub</h5>
@@ -109,6 +111,9 @@ function App() {
                   </li>
                   <li>
                     <Link to="/reports" className="text-dark">Reports</Link>
+                     <li>
+                    <Link to="/viewmap" className="text-dark">ViewMap</Link>
+                  </li>
                   </li>
                 </ul>
               </div>
