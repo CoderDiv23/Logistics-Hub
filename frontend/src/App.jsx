@@ -16,83 +16,53 @@ import Notifications from './components/Notifications'
 import Settings from './components/Settings'
 import Reports from './components/Reports'
 
-
 function App() {
   const [user, setUser] = useState(null)
+  const [isOpen, setIsOpen] = useState(false)
+
+  const toggleSidebar = () => setIsOpen(!isOpen)
+  const closeSidebar = () => setIsOpen(false)
 
   return (
     <Router>
       <div className="App">
-        {/* Navigation Bar */}
-        <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-          <div className="container-fluid">
-            <Link className="navbar-brand" to="/">Digital Logistics Hub</Link>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav me-auto">
-                <li className="nav-item">
-                  <Link className="nav-link" to="/">Home</Link>
-                </li>
-                {user && (
-                  <>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/tracking">Shipment Tracking</Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/cargo">Cargo Management</Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/reports">Reports</Link>
-                    </li>
-                  </>
-                )}
-              </ul>
-              <ul className="navbar-nav">
-                {user ? (
-                  <li className="nav-item dropdown">
-                    <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                      {user.name}
-                    </a>
-                    <ul className="dropdown-menu">
-                      <li><Link className="dropdown-item" to="/profile">Profile</Link></li>
-                      <li><Link className="dropdown-item" to="/settings">Settings</Link></li>
-                      <li><Link className="dropdown-item" to="/notifications">Notifications</Link></li>
-                      <li><hr className="dropdown-divider" /></li>
-                      <li><button className="dropdown-item" onClick={() => setUser(null)}>Logout</button></li>
-                    </ul>
-                  </li>
-                ) : (
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/login">Login</Link>
-                  </li>
-                )}
-              </ul>
-            </div>
-          </div>
-        </nav>
+        {/* Sidebar */}
+        <div className={`sidenav ${isOpen ? 'open' : ''}`}>
+          <button className="closebtn" onClick={closeSidebar}>&times;</button>
+          <Link to="/" onClick={closeSidebar}>Home</Link>
+          <Link to="/client-dashboard" onClick={closeSidebar}>Client Dashboard</Link>
+          <Link to="/tracking" onClick={closeSidebar}>Shipment Tracking</Link>
+          <Link to="/cargo" onClick={closeSidebar}>Cargo Management</Link>
+          <Link to="/reports" onClick={closeSidebar}>Reports</Link>
+          <Link to="/login" onClick={closeSidebar}>Login</Link>
+        </div>
 
-        {/* Main Content */}
-        <main className="container-fluid mt-4">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login setUser={setUser} />} />
-            <Route path="/client-dashboard" element={<ClientDashboard user={user} />} />
-            <Route path="/driver-dashboard" element={<DriverDashboard user={user} />} />
-            <Route path="/tracking" element={<ShipmentTracking />} />
-            <Route path="/cargo" element={<CargoManagement />} />
-            <Route path="/profile" element={<UserProfile />} />
-            <Route path="/notifications" element={<Notifications />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/reports" element={<Reports />} />
-          
-          </Routes>
-        </main>
+        {/* Overlay */}
+        {isOpen && <div className="overlay" onClick={closeSidebar}></div>}
+
+        {/* Main content */}
+        <div id="main" className={isOpen ? 'shifted' : ''}>
+          {/* Sidebar toggle button */}
+          <button className="openbtn" onClick={toggleSidebar}>☰ </button>
+
+          <main className="container-fluid p-0">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login setUser={setUser} />} />
+              <Route path="/client-dashboard" element={<ClientDashboard user={user} />} />
+              <Route path="/driver-dashboard" element={<DriverDashboard user={user} />} />
+              <Route path="/tracking" element={<ShipmentTracking />} />
+              <Route path="/cargo" element={<CargoManagement />} />
+              <Route path="/profile" element={<UserProfile />} />
+              <Route path="/notifications" element={<Notifications />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/reports" element={<Reports />} />
+            </Routes>
+          </main>
 
         {/* Footer */}
-    <footer className="bg-light text-center text-lg-start mt-5 w-100">
-  <div className="container-fluid p-4">
+        <footer className="bg-light text-center text-lg-start mt-5">
+          <div className="container p-4">
             <div className="row">
               <div className="col-lg-6 col-md-12 mb-4 mb-md-0">
                 <h5 className="text-uppercase">Digital Logistics Hub</h5>
@@ -112,8 +82,8 @@ function App() {
           </div>
           <div className="text-center p-3 bg-dark text-light">
             © 2025 Digital Logistics Hub
-          </div>
-        </footer>
+          </footer>
+        </div>
       </div>
     </Router>
   )
@@ -121,61 +91,54 @@ function App() {
 
 function Home() {
   return (
-    <div className="container-fluid p-0">
-      {/* Hero Section */}
-      <div
-        className="jumbotron d-flex flex-column justify-content-center align-items-center text-center"
-        style={{
-          backgroundImage: 'url("/downloads/pic.jpg")', // make sure this image is in public/downloads/pic.jpg
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: '60vh',
-          color: 'white',
-          position: 'relative'
-        }}
-      >
+    <>
+      {/* HERO SECTION */}
+      <div className="hero-section">
         <div className="hero-overlay"></div>
         <div className="hero-content">
-          <h1>Welcome to Digital Logistics Hub</h1>
-          <p className="lead">
-            Your comprehensive solution for cargo tracking and logistics management.
-          </p>
-          <hr className="my-4" />
-          <p>Track shipments, manage cargo, and optimize delivery routes with our modern platform.</p>
-          <Link className="btn btn-primary btn-lg" to="/login" role="button">
-            Get Started
-          </Link>
+          <h1>
+            Welcome to Digital <span style={{ color: '#28a745' }}>Logistics</span>{' '}
+            <span style={{ color: '#ffc107' }}>Hub</span>
+          </h1>
+          <p>Your comprehensive solution for cargo tracking and logistics management.</p>
+           <Link
+    className="btn btn-primary btn-lg mt-4"
+    to="/login"
+    role="button"
+    style={{ marginTop: '40px' }} // Adjust the distance here
+  >
+    Get Started
+  </Link>
         </div>
       </div>
 
-      {/* Feature Section */}
+      {/* SPECIAL FEATURES SECTION */}
       <div className="container text-center mt-5">
-        <div className="row">
+        <h1 className="mb-4 fw-bold">Special Features</h1>
+        <div className="row justify-content-center">
           <div className="col-md-4 mb-4">
-            <div className="card h-100 p-3 shadow-sm">
+            <div className="card h-100 p-3 shadow-sm feature-card feature-blue">
               <h5>Real-Time Tracking</h5>
               <p>Monitor your shipments and deliveries as they happen.</p>
             </div>
           </div>
           <div className="col-md-4 mb-4">
-            <div className="card h-100 p-3 shadow-sm">
+            <div className="card h-100 p-3 shadow-sm feature-card feature-green">
               <h5>Fleet Management</h5>
               <p>Optimize routes and manage drivers efficiently.</p>
             </div>
           </div>
+
           <div className="col-md-4 mb-4">
-            <div className="card h-100 p-3 shadow-sm">
+            <div className="card h-100 p-3 shadow-sm feature-card feature-yellow">
               <h5>Data Analytics</h5>
               <p>Visualize your logistics performance with insightful analytics.</p>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
-
-    
-
 
 export default App
