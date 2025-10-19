@@ -1,0 +1,104 @@
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.5; }
+}
+
+.shipment-marker.moving {
+  animation: pulse 2s infinite;
+}
+
+.eta-countdown {
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.eta-urgent {
+  color: #dc2626;
+  animation: blink 1s infinite;
+}
+
+.realtime-tracking-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.map-container {
+  position: relative;
+}
+
+.shipment-progress {
+  transition: width 0.5s ease-in-out;
+}
+
+/* Marker styles */
+.shipment-marker {
+  background: #3b82f6;
+  border: 3px solid white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.driver-marker {
+  background: #10b981;
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.user-location-marker {
+  background: purple;
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .map-container {
+    height: 300px !important;
+  }
+  
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  .list-group-item {
+    padding: 0.75rem 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .map-container {
+    height: 250px !important;
+  }
+  
+  h1 {
+    font-size: 1.75rem;
+  }
+  
+  .lead {
+    font-size: 0.9rem;
+  }
+  
+  .badge {
+    font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .map-container {
+    height: 600px !important;
+  }
+}
