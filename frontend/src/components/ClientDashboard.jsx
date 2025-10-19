@@ -7,9 +7,9 @@ const mockApiService = {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([
-          { id: 1, trackingNumber: 'SH001', status: 'In Transit', origin: 'New York', destination: 'London', estimatedDelivery: '2025-10-25' },
-          { id: 2, trackingNumber: 'SH002', status: 'Delivered', origin: 'Los Angeles', destination: 'Tokyo', estimatedDelivery: '2025-10-15' },
-          { id: 3, trackingNumber: 'SH003', status: 'Pending', origin: 'Chicago', destination: 'Berlin', estimatedDelivery: '2025-10-30' },
+          { id: 1, trackingNumber: 'SH001', status: 'In Transit', origin: 'New York', destination: 'London', estimatedDelivery: '2025-10-25', route: 'NYC → London', progress: '65%', eta: '2 days', driver: 'John Smith' },
+          { id: 2, trackingNumber: 'SH002', status: 'Delivered', origin: 'Los Angeles', destination: 'Tokyo', estimatedDelivery: '2025-10-15', route: 'LA → Tokyo', progress: '100%', eta: 'Delivered', driver: 'Hiro Tanaka' },
+          { id: 3, trackingNumber: 'SH003', status: 'Pending', origin: 'Chicago', destination: 'Berlin', estimatedDelivery: '2025-10-30', route: 'Chicago → Berlin', progress: '0%', eta: '5 days', driver: 'Maria Lopez'  },
         ])
       }, 500)
     })
@@ -19,9 +19,9 @@ const mockApiService = {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([
-          { id: 1, shipmentId: 1, description: 'Electronics', weight: '500kg', status: 'Loaded', location: 'Port of New York' },
-          { id: 2, shipmentId: 1, description: 'Clothing', weight: '200kg', status: 'In Transit', location: 'Atlantic Ocean' },
-          { id: 3, shipmentId: 2, description: 'Automotive Parts', weight: '1200kg', status: 'Delivered', location: 'Tokyo Warehouse' },
+          { id: 1, shipmentId: 1, description: 'Electronics', weight: '500kg', status: 'Loaded', location: 'Port of New York', containerNumber: 'CNT001', departureDate: '2025-10-12', arrivalDate: '2025-10-25', gpsLocation: '41.2033° N, 73.2026° W', transportMode: 'Sea Freight', customClearanceStatus: 'Pending', handlingAgent: 'Global Logistics Ltd.', lastUpdate: '2025-10-18 08:30 AM', insuranceStatus: 'Insured' },
+          { id: 2, shipmentId: 1, description: 'Clothing', weight: '200kg', status: 'In Transit', location: 'Atlantic Ocean',  containerNumber: 'CNT002', departureDate: '2025-10-13', arrivalDate: '2025-10-27', gpsLocation: '36.7783° N, 40.1234° W',transportMode: 'Sea Freight', customClearanceStatus: 'Cleared', handlingAgent: 'Maritime Cargo Co.', lastUpdate: '2025-10-18 09:10 AM', insuranceStatus: 'Insured' },
+          { id: 3, shipmentId: 2, description: 'Automotive Parts', weight: '1200kg', status: 'Delivered', location: 'Tokyo Warehouse', containerNumber: 'CNT003', departureDate: '2025-09-29', arrivalDate: '2025-10-15', gpsLocation: '35.6895° N, 139.6917° E', transportMode: 'Air Freight', customClearanceStatus: 'Completed', handlingAgent: 'SkyFreight Japan',lastUpdate: '2025-10-15 05:45 PM', insuranceStatus: 'Insured' },
         ])
       }, 500)
     })
@@ -43,7 +43,10 @@ const ClientDashboard = ({ user }) => {
   const [shipments, setShipments] = useState([])
   const [cargo, setCargo] = useState([])
   const [notifications, setNotifications] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+
+  const [expandedHeader, setExpandedHeader] = useState(null);
+
 
   useEffect(() => {
     // Fetch data from mock APIs
@@ -136,13 +139,18 @@ const ClientDashboard = ({ user }) => {
               <div className="table-responsive">
                 <table className="table table-striped table-hover">
                   <thead>
-                    <tr>
+                    <tr>                
                       <th>Tracking Number</th>
                       <th>Status</th>
                       <th>Origin</th>
                       <th>Destination</th>
                       <th>Estimated Delivery</th>
                       <th>Actions</th>
+                      <th>Shipment ID</th>
+                      <th>Route</th>   
+                      <th>Progress</th>
+                      <th>ETA</th>   
+                      <th>Driver</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -160,6 +168,11 @@ const ClientDashboard = ({ user }) => {
                         <td>
                           <button className="btn btn-sm btn-outline-primary">View Details</button>
                         </td>
+                        <td>{shipment.id}</td>
+                        <td>{shipment.route}</td>
+                        <td>{shipment.progress}</td>
+                        <td>{shipment.eta}</td>
+                        <td>{shipment.driver}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -181,13 +194,39 @@ const ClientDashboard = ({ user }) => {
               <div className="table-responsive">
                 <table className="table table-striped table-hover">
                   <thead>
-                    <tr>
-                      <th>Description</th>
-                      <th>Weight</th>
-                      <th>Status</th>
-                      <th>Location</th>
-                      <th>Shipment</th>
-                    </tr>
+                    <tr> 
+                      
+                     {[
+                        { label: 'Description', title: 'Description of the cargo' },
+                        { label: 'Weight', title: 'Weight of cargo in kilograms' },
+                        { label: 'Status', title: 'Current status of the cargo' },
+                        { label: 'Location', title: 'Current location of the cargo' },
+                        { label: 'Shipment', title: 'Shipment tracking number' },
+                        { label: 'Container Number', title: 'Container Number for cargo' },
+                        { label: 'Departure Date', title: 'Departure Date' },
+                        { label: 'Arrival Date', title: 'Arrival Date' },
+                        { label: 'Current Location (GPS)', title: 'Current Location in GPS coordinates' },
+                        { label: 'Transport Mode', title: 'Mode of transport' },
+                        { label: 'Custom Clearance Status', title: 'Custom Clearance Status' },
+                        { label: 'Handling Agent', title: 'Handling Agent for cargo' },
+                        { label: 'Last Time Update', title: 'Last Time Update' },
+                        { label: 'Insurance Status', title: 'Insurance Status' },
+                      ].map((header, index) => (
+                      <th
+                        key={index}
+                        className={expandedHeader === index ? 'expanded' : ''}
+                        onClick={() => setExpandedHeader(expandedHeader === index ? null : index)}
+                        style={{ position: 'relative' }}
+                      >
+                        {header.label}
+                        {expandedHeader === index && (
+                          <span style={{ marginLeft: '5px', fontWeight: 'normal', fontSize: '0.85em', color: '#555' }}>
+                            ({header.title})
+                          </span>
+                        )}
+                      </th>
+                    ))}
+                  </tr>
                   </thead>
                   <tbody>
                     {cargo.map(item => (
@@ -201,6 +240,15 @@ const ClientDashboard = ({ user }) => {
                         </td>
                         <td>{item.location}</td>
                         <td>{shipments.find(s => s.id === item.shipmentId)?.trackingNumber || 'N/A'}</td>
+                        <td>{item.containerNumber}</td>
+                        <td>{item.departureDate}</td>
+                        <td>{item.arrivalDate}</td>
+                        <td>{item.gpsLocation}</td>
+                        <td>{item.transportMode}</td>
+                        <td>{item.customClearanceStatus}</td>
+                        <td>{item.handlingAgent}</td>
+                        <td>{item.lastUpdate}</td>
+                        <td>{item.insuranceStatus}</td>
                       </tr>
                     ))}
                   </tbody>

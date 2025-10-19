@@ -41,6 +41,7 @@ const mockApiService = {
             origin: 'Chicago, USA',
             destination: 'Berlin, Germany',
             estimatedDelivery: '2025-10-30',
+            progress: '2025-10-30',
             currentLocation: 'Chicago Port',
             progress: 10,
             cargo: [
