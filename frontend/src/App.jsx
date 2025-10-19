@@ -16,6 +16,7 @@ import Notifications from './components/Notifications'
 import Settings from './components/Settings'
 import Reports from './components/Reports'
 
+
 function App() {
   const [user, setUser] = useState(null)
 
@@ -101,15 +102,9 @@ function App() {
               <div className="col-lg-6 col-md-12 mb-4 mb-md-0">
                 <h5 className="text-uppercase">Links</h5>
                 <ul className="list-unstyled mb-0">
-                  <li>
-                    <Link to="/tracking" className="text-dark">Shipment Tracking</Link>
-                  </li>
-                  <li>
-                    <Link to="/cargo" className="text-dark">Cargo Management</Link>
-                  </li>
-                  <li>
-                    <Link to="/reports" className="text-dark">Reports</Link>
-                  </li>
+                  <li><Link to="/tracking" className="text-dark">Shipment Tracking</Link></li>
+                  <li><Link to="/cargo" className="text-dark">Cargo Management</Link></li>
+                  <li><Link to="/reports" className="text-dark">Reports</Link></li>
                 </ul>
               </div>
             </div>
@@ -125,20 +120,61 @@ function App() {
 
 function Home() {
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-12">
-          <div className="jumbotron">
-            <h1 className="display-4">Welcome to Digital Logistics Hub</h1>
-            <p className="lead">Your comprehensive solution for cargo tracking and logistics management.</p>
-            <hr className="my-4" />
-            <p>Track shipments, manage cargo, and optimize delivery routes with our modern platform.</p>
-            <Link className="btn btn-primary btn-lg" to="/login" role="button">Get Started</Link>
+    <div className="container-fluid p-0">
+      {/* Hero Section */}
+      <div
+        className="jumbotron d-flex flex-column justify-content-center align-items-center text-center"
+        style={{
+          backgroundImage: 'url("/downloads/pic.jpg")', // make sure this image is in public/downloads/pic.jpg
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          height: '60vh',
+          color: 'white',
+          position: 'relative'
+        }}
+      >
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <h1>Welcome to Digital Logistics Hub</h1>
+          <p className="lead">
+            Your comprehensive solution for cargo tracking and logistics management.
+          </p>
+          <hr className="my-4" />
+          <p>Track shipments, manage cargo, and optimize delivery routes with our modern platform.</p>
+          <Link className="btn btn-primary btn-lg" to="/login" role="button">
+            Get Started
+          </Link>
+        </div>
+      </div>
+
+      {/* Feature Section */}
+      <div className="container text-center mt-5">
+        <div className="row">
+          <div className="col-md-4 mb-4">
+            <div className="card h-100 p-3 shadow-sm">
+              <h5>Real-Time Tracking</h5>
+              <p>Monitor your shipments and deliveries as they happen.</p>
+            </div>
+          </div>
+          <div className="col-md-4 mb-4">
+            <div className="card h-100 p-3 shadow-sm">
+              <h5>Fleet Management</h5>
+              <p>Optimize routes and manage drivers efficiently.</p>
+            </div>
+          </div>
+          <div className="col-md-4 mb-4">
+            <div className="card h-100 p-3 shadow-sm">
+              <h5>Data Analytics</h5>
+              <p>Visualize your logistics performance with insightful analytics.</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
+
+    
+
 
 export default App
